@@ -1,10 +1,12 @@
 import telebot
 import time
 import requests
+from dotenv import load_dotenv
+import os
 
 
-BOT_TOKEN = '6410658353:AAEcvkKWhY-X2L7yT4N0hVhML7nCkyhXFXM'
-WEATHER_TOKEN = 'https://api.openweathermap.org/data/2.5/weather?q={}&appid=efd8bed5876a79906b7698216deaec22'
+load_dotenv()
+BOT_TOKEN = os.environ.get('BOT_TOKEN')
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
@@ -26,7 +28,7 @@ def reply_msg(message):
     bot.send_message(message.chat.id, message.text)
     # time.sleep(0.006)
     # bot.reply_to(message, str(message.chat.id))
-    bot.send_message(message.chat.id, "Sleep tugadi!!!!..")
+    # bot.send_message(message.chat.id, "Sleep tugadi!!!!..")
 
 def get_full_data(city):
     url = 'https://api.openweathermap.org/data/2.5/weather?q={}&appid=efd8bed5876a79906b7698216deaec22'.format(city)
