@@ -7,8 +7,10 @@ import os
 
 load_dotenv()
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
+WEATHER_TOKEN = os.environ.get('WEATHER_TOKEN')
 
 bot = telebot.TeleBot(BOT_TOKEN)
+
 
 @bot.message_handler(commands=['start'])
 def say_hello(message):
@@ -16,22 +18,21 @@ def say_hello(message):
 
 @bot.message_handler(commands=['weather'])
 def get_weather(message):
+    holatuz = {"Clear":" musaffo osmon", "Sunny":" quyoshli"}
     city = message.text[9:]
     data = get_full_data(city)
+    print(str(data))
+    holat = data.get("weather", [])[0].get("main", "xatolik")
     temp = round(data.get("main", {}).get('temp', 0) - 273.15)
     location = data.get("sys", {}).get('country')
-    osmon = data["weather"][0]['main']
-    bot.send_message(message.chat.id, f"hozirda {city}da havo {temp} bo'lishi kutulmoqda!..  va joylashuv {location} Havo {osmon} ")
+    bot.send_message(message.chat.id, f"hozirda {city}da havo {temp} bo'lishi kutulmoqda!..  va joylashuv {location} Havo harorari {holat} ")
 
 @bot.message_handler(func = lambda msg: True)
 def reply_msg(message):
     bot.send_message(message.chat.id, message.text)
-    # time.sleep(0.006)
-    # bot.reply_to(message, str(message.chat.id))
-    # bot.send_message(message.chat.id, "Sleep tugadi!!!!..")
 
 def get_full_data(city):
-    url = 'https://api.openweathermap.org/data/2.5/weather?q={}&appid=efd8bed5876a79906b7698216deaec22'.format(city)
+    url = WEATHER_TOKEN.format(city)
     response = requests.get(url)
     return response.json()
 
